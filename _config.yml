@@ -6,10 +6,10 @@ description: My journey with Data Science-<br /> projects, passions, and some pr
 baseurl: "/echiyembekeza.github.io" # the subpath of your site, e.g. /blog
 url: # the base hostname & protocol for your site
 author:
-street_address: 1234 Somewhere Road
-city: Nashville
-state: TN
-zip_code: 55555
+#street_address: 1234 Somewhere Road
+city: W. Palm Beach
+state: FL
+zip_code: 33413
 country: United States of America
 phone: (716) 555-5555
 
