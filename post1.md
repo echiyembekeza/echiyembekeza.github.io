@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Generic
-description: Lorem ipsum dolor est
+title: Getting started...
+description: Learning what it all means
 image: assets/images/pic11.jpg
 nav-menu: true
 ---
