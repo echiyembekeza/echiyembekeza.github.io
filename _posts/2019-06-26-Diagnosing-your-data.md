@@ -267,18 +267,6 @@ df['AGES'] = df['AGES'].astype('category')
 ```
 
 
-```python
-df_cat = df.select_dtypes(include=['category']).copy()
-df_cat['FAC_REGION'] = df_cat['FAC_REGION'].cat.codes
-df_cat['ETHNICITY'] = df_cat['ETHNICITY'].cat.codes
-df_cat['RACE'] = df_cat['RACE'].cat.codes
-df_cat['SEX'] = df_cat['SEX'].cat.codes
-df_cat['WEEKDAY'] = df_cat['WEEKDAY'].cat.codes
-df_cat['EDHR_DISCH'] = df_cat['EDHR_DISCH'].cat.codes
-df_cat['PT_STATUS'] = df_cat['PT_STATUS'].cat.codes
-df_cat['PAYER'] = df_cat['PAYER'].cat.codes
-```
-
 ## Boxplot of Ages of Patients Grouped by Sex
 Below is a boxplot that is showing the distribution of ages of the patients presenting to the emergency departments grouped by sex. It is important to note that the data included values that would be considered outliers by this plot. Patients who are:   
     Age 0 = 0 to 28 days  
