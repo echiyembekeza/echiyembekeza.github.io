@@ -3,6 +3,7 @@ layout: post
 title: Diagnosing Your Data
 description: Healthcare Data Science Project 
 ---
+
 # Diagnosing Your Data
 ## Healthcare Data Science Project  
 
@@ -35,7 +36,7 @@ But, having this sort of data can raise (and hopefully begin to answer) several 
 ##### Does Ethnicity and Race make a difference?  
   
 
-I decided to use four quarters for this project--quarters 3 and 4 of 2017 and quarters 1 and 2 of 2018. In the code below, I selected the columns of interest from the entire dataset.
+I decided to use four quarters for this project--quarters 3 and 4 of 2017 and quarters 1 and 2 of 2018. In the code below, I selected the columns of interest from the entire dataset. Below, I am showing the first 5 rows of the data, to see how the data looks and that the information is in the appropriate format.
 
 
 ```python
@@ -212,9 +213,10 @@ df.head()
 
 
 
+Ultimately, with this particular project, I was interested in the characteristics of the individuals whom presented to the ED for a diagnosis related to opioid overdose/abuse. Those specific dx codes are shown below. I thought that it would also be interesting to see if there was a difference in the time of day that the patients presented to the ED. For the first analysis, I maintained the format of the hours of arrival (from 00 to 23). For later analysis, I adjusted the format of the time of arrival to reflect late/early. Late would be from 8pm until 8am (basically non-business hours), while early is everything else.
+
 
 ```python
-#These are the opioid codes that we are most interested in. We will filter the [REASON_CDE] column by these specific codes
 def is_opioid_dx(opioid_dx):
     if opioid_dx in ['F11.10','F11.120','F11.121',
 'F11.122','F11.129','F11.14','F11.150','F11.151','F11.159','F11.181','F11.182','F11.188',
@@ -277,12 +279,13 @@ df_cat['PT_STATUS'] = df_cat['PT_STATUS'].cat.codes
 df_cat['PAYER'] = df_cat['PAYER'].cat.codes
 ```
 
-## Boxplots of Ages of Patients Grouped by Sex
-Below are 2 boxplots showing the distribution of ages of the patients presenting to the emergency departments grouped by sex. The data included values that would be considered outliers by this plot. Patients who are:   
+## Boxplot of Ages of Patients Grouped by Sex
+Below is a boxplot that is showing the distribution of ages of the patients presenting to the emergency departments grouped by sex. It is important to note that the data included values that would be considered outliers by this plot. Patients who are:   
     Age 0 = 0 to 28 days  
     Age 777 = 29 to 364 days (considered an outlier)  
     Age 888 = 100 years and older (considered an outlier)  
     Age 999 = Unknown (considered an outlier)  
+However, for the purposes of this plot, those data points did not add any real value and were dropped from the plot.  
 
 
 ```python
@@ -290,8 +293,30 @@ age_boxplot = df.boxplot('AGE','SEX', rot=30, figsize=(5,6), showfliers=False)
 ```
 
 
-![png]({{"/assets/images/output_6_0.png"}})
+![png]({{"/assets/images/output_7_0.png"}})
 
+
+From the plot above, we are able to see that there are some subtle differences between the ages of the females and the males presenting in the ED. While the median age (50% of the data) is the same for both females and males, there is a bit of a difference between quartile 1 (25% of the data) between the classes. For females, we see that Q1 is at age 21, while in the male group it is much sooner at 17. Also, the maximum age for both females and males showed differences. The oldest female that went to the ED was 108 years-old, while the oldest male was 116 years-old. (It is important to remember that outliers were removed from the plot.)
+
+## Boxplot of Patients Grouped by Payer Against Hr of Arrival  
+Below is a boxplot that is showing the distribution of the time (hours) of the of the patients presenting to the emergency departments grouped by their respective payer source. The list of the different payer codes are below:   
+
+A single character upper case alpha code identifying the expected primary source of reimbursement for services rendered based on the patient’s status at the time of reporting. This was a required entry.  
+A – Medicare  
+B – Medicare Managed Care  
+C – Medicaid  
+D – Medicaid Managed Care  
+E – Commercial Health Insurance  
+H – Workers’ Compensation  
+I – TriCare or Other Federal Government    
+J – VA  
+K – Other State/Local Government  
+L – Self Pay – Patients with no insurance coverage  
+M – Other  
+N – Non-Payment – Includes charity, professional courtesy, no charge, research/clinical trial, refusal to pay.  
+O – Kidcare - Includes Healthy Kids, Medikids, and Children’s Medical Services  
+P – Unknown   
+Q – Commercial Liability Coverage  
 
 
 ```python
@@ -300,7 +325,32 @@ time_payer_boxplot = df.boxplot('HR_ARRIVAL','PAYER', rot=45, figsize=(9,6), sho
 ```
 
 
-![png]({{"/assets/images/output_7_0.png"}})
+![png]({{"/assets/images/output_10_0.png"}})
+
+
+With this particular chart, a difference was not expecting between minimum values or the maximum values as it related to the payer source. It seems intuitive that patients, regardless of their insurance status, would come at any hour throughout the day. Interestingly, there were no patient encounters in the ED between the hours of 12am and 1am for patients with Commercial Liability Coverage.  
+  
+It is also interesting that patients with Kidcare (O on the plot), Unknown (P on the plot), and Commercial Liability Coverage (Q on the plot) all showed a Q1 (25% of the data) closer to noon, while all of the others were at 10am. The same three groups, with the addition of Medicaid Managed Care (D on the plot), also showed significantly higher medians than the other payers. They are all showing a median time of arrival of 3pm and later.    
+  
+It would be interesting to delve a bit deeper into this. With Kidcare, Medicaid Managed Care, and Unknown, there may be some lifestyle characteristics that play a role in this. These individuals are likely lower income (based on the requirements for Florida's Medicaid), which may provide a foundation for researching the types of jobs these patients have. 3pm is also around the time that most schools have dismissed their students.  
+  
+There are a lot of speculations that can be made, but this is definitely something that should be explored further.
+
+## Boxplot of Patients Grouped by Admission Source Against Hr of Arrival  
+  
+This was not a self-reported field, but contains a two digit code or one character alpha code. The admission source provides us with information about where the patient came from prior to reaching the ED. The codes are:  
+
+01 – Non-health care facility point of origin  
+02 – Clinic or Physician’s Office  
+04 – Transfer from another Hospital  
+05 – Transfer from a Skilled Nursing Facility (SNF) or Intermediate Care Facility (ICF)  
+06 – Transfer from another health care facility  
+08 – Court/Law Enforcement  
+09 – Information Not Available  
+D – Transfer between units within the same hospital  
+E – Transfer from Ambulatory Surgery Center  
+F – Transfer from hospice and under a hospice plan of care or enrolled in a hospice program  
+
 
 
 
@@ -309,8 +359,24 @@ time_admsrc_boxplot = df.boxplot('HR_ARRIVAL','ADMSRC', rot=45, figsize=(9,6), s
 ```
 
 
-![png]({{"/assets/images/output_8_0.png"}})
+![png]({{"/assets/images/output_13_0.png"}})
 
+
+The plot above shows a couple of things that are interesting. Other hospitals and law enforcement have the largest spread of times that they are the source of patients going to the ED. This seems logical, as they are the sites that are "fully operational" during more hours of the day.
+
+## Bar Chart With Count of Patients Grouped by Ethinicity and Race  
+Self designated by the patient or patient’s parent or guardian. The patient’s ethnic background shall be reported as one choice from the following list of alternatives. This was a required entry.  
+E1 – Hispanic or Latino. A person of Mexican, Puerto Rican, Cuban, Central or South American or other Spanish culture or origin, regardless of race.  
+E2 – Non-Hispanic or Latino. A person not of any Spanish culture or origin.  
+E7 – Unknown  
+Self designated by the patient or patient’s parent or guardian. A single digit code identifying the patient’s racial background. Like Ethnicity, this was also a required entry.  
+1 – American Indian or Alaskan Native  
+2 – Asian  
+3 – Black or African American  
+4 – Native Hawaiian or Other Pacific Islander  
+5 – White  
+6 – Other  
+7 – Unknown  
 
 
 ```python
@@ -326,8 +392,14 @@ eth_race.plot(kind='bar', width=1)
 
 
 
-![png]({{"/assets/images/output_9_1.png"}})
+![png]({{"/assets/images/output_16_1.png"}})
 
+
+This chart is showing a basic breakdown of the number of patients presenting to the ED grouped by their respective Ethinicity and Race. The group that was the highest utilizer of the ED during the observed time period, were patients who identified as non-Hispanic, White. The second highest utilizer, were patients who identified as non-Hispanic, Black or African-American.  
+  
+I think it would be useful to compare ED utilization rates of these particular groups as it compares to their overall representation in the state of Florida. (As an example, if non-Hispanic, Whites make up 80% of the population in Florida, and they are 80% of the utilization...this behavior would be expected.)
+
+## Bar Chart With Count of Patients Grouped by Ages (in Decades)  
 
 
 ```python
@@ -343,7 +415,14 @@ plt.show()
 ```
 
 
-![png]({{"/assets/images/output_10_0.png"}})
+![png]({{"/assets/images/output_19_0.png"}})
+
+
+The chart above shows that highest utilizers of the ED in the state of Florida are between the ages of 40 and 49. The second highest utilizers are patients between the ages of 90 and 99, and the third highest utilizers being between the ages 20 and 29.
+
+## Pairplot of a Subset of the Data  
+  
+This visualization can be useful when trying to determine if there are any correlations that exist in your dataset between all of the features. Because much of the data is discrete, we are not really seeing any apparent correlations in our dataset.
 
 
 
@@ -359,15 +438,12 @@ sns.pairplot(df_cat.sample(10000))
 
 
 
-![png]({{"/assets/images/output_11_1.png"}})
+![png]({{"/assets/images/output_22_1.png"}})
 
 
-
-```python
-florida_map = gpd.read_file('/Users/EricJC/Documents/Data/tl_2016_12_cousub.shp')
-fig.ax = plt.subplots(figsize = (15,15))
-florida_map.plot(ax=ax)
-```
+## Beginnings of Machine Learning  
+  
+Below, we have taken the dataset and split it into two different groups (Train and Test) to train a couple of different Machine Learning models and test them. The "target" or "response" variable that will be used in these models is the Reason Code (or the Diagnosis given to the patient upon arrival). I am ultimately interested in determining what features are a good predictor of whether a patient will present to the ED for a reason related to opiod overdose/abuse. Below is some of the code for reference.
 
 
 ```python
@@ -389,7 +465,6 @@ X, y = split_target(df_cat, 'REASON_CDE_01')
 
 
 ```python
-#after splitting my data into train and test with the code above, X contains the df and y contains the target (or response variable)
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
 ```
@@ -430,7 +505,11 @@ X_train = X_train.values
 X_test = X_test.values
 ```
 
-Logistic Regression model for the data
+### Logistic Regression model for the data  
+  
+First, let's discuss the performance of the training and testing sets. They are close together, which suggests the model did not overfit to the training set. The accuracy is approximately 99.8%.  
+  
+Looking at the coefficients, we can confirm that they are aligned with what our other visualizations have shown and  make intuitive sense. The features with the highest coefficient are related to the age of the person going to the ED. Ethnicity also had a relatively high coefficient. Unfortunately, the dataset that was used to train and test these models did not contain all of the features of the original dataset. With that, the information is limited in its usefulness. 
 
 
 ```python
@@ -488,7 +567,9 @@ for clf in clfs:
     8   HR_ARRIVAL_01_0 -3.604864
 
 
-Random Forest model
+### Random Forest model  
+  
+With this model, the accuracy is 99.8%. Unlike the logistic regression, this model is showing other features may be related to one of the diagnosis codes related to opioid overdose/abuse. For example, the day of the week, the region (in Florida) where the facility is locate, and the payer may have some impact. It will be interesting to increase the number of features that are included in both of these ML models to see if it results in something even more useful.
 
 
 ```python
@@ -508,39 +589,41 @@ for clf in clfs_rf:
 ```
 
     <class 'sklearn.ensemble.forest.RandomForestClassifier'>
-    Training accuracy: 0.9984786666666666
-    Validation accuracy: 0.9980715
+    Training accuracy: 0.9984845
+    Validation accuracy: 0.998071
                  column           imp
-    5        EDHR_DISCH  3.331399e-01
-    4           WEEKDAY  2.097017e-01
-    0        FAC_REGION  2.073311e-01
-    7             PAYER  8.950472e-02
-    6         PT_STATUS  5.451237e-02
-    2              RACE  3.236826e-02
-    1         ETHNICITY  2.047717e-02
-    3               SEX  1.944735e-02
-    9   HR_ARRIVAL_01_1  6.625985e-03
-    8   HR_ARRIVAL_01_0  5.290800e-03
-    13          AGES_30  5.234026e-03
-    12          AGES_20  3.686505e-03
-    14          AGES_40  3.292342e-03
-    15          AGES_50  2.963258e-03
-    16          AGES_60  2.475198e-03
-    17          AGES_70  1.071140e-03
-    11          AGES_10  5.560132e-04
-    18          AGES_80  4.611393e-04
-    26        AGES_1000  4.248360e-04
-    10           AGES_0  4.178831e-04
-    25         AGES_890  2.908394e-04
-    19          AGES_90  2.521540e-04
-    24         AGES_780  2.147502e-04
-    20         AGES_100  1.212306e-04
-    23         AGES_140  9.780458e-05
-    21         AGES_110  4.128419e-05
-    22         AGES_120  2.005977e-07
+    5        EDHR_DISCH  3.560950e-01
+    4           WEEKDAY  1.936233e-01
+    0        FAC_REGION  1.915416e-01
+    7             PAYER  9.858439e-02
+    6         PT_STATUS  5.195780e-02
+    2              RACE  3.464373e-02
+    1         ETHNICITY  2.509306e-02
+    3               SEX  1.683374e-02
+    8   HR_ARRIVAL_01_0  5.930048e-03
+    9   HR_ARRIVAL_01_1  5.272944e-03
+    13          AGES_30  3.792687e-03
+    12          AGES_20  3.631944e-03
+    15          AGES_50  3.093545e-03
+    14          AGES_40  3.023825e-03
+    16          AGES_60  2.946155e-03
+    17          AGES_70  8.259156e-04
+    18          AGES_80  4.865573e-04
+    10           AGES_0  4.649437e-04
+    11          AGES_10  4.597915e-04
+    26        AGES_1000  3.401072e-04
+    19          AGES_90  3.060731e-04
+    24         AGES_780  3.057345e-04
+    21         AGES_110  2.238277e-04
+    23         AGES_140  2.149098e-04
+    25         AGES_890  1.599514e-04
+    20         AGES_100  1.483733e-04
+    22         AGES_120  3.914851e-08
 
 
-Neural Network model
+### Neural Network model  
+  
+This model takes quite a bit more time than the others...but we will save it for next time.
 
 
 ```python
