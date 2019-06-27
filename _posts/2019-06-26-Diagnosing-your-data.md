@@ -293,7 +293,7 @@ age_boxplot = df.boxplot('AGE','SEX', rot=30, figsize=(5,6), showfliers=False)
 ```
 
 
-![png]({{"/assets/images/output_7_0.png"}})
+![png]({{ "/assets/images/output_7_0.png" }})
 
 
 From the plot above, we are able to see that there are some subtle differences between the ages of the females and the males presenting in the ED. While the median age (50% of the data) is the same for both females and males, there is a bit of a difference between quartile 1 (25% of the data) between the classes. For females, we see that Q1 is at age 21, while in the male group it is much sooner at 17. Also, the maximum age for both females and males showed differences. The oldest female that went to the ED was 108 years-old, while the oldest male was 116 years-old. (It is important to remember that outliers were removed from the plot.)
