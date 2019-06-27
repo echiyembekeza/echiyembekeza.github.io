@@ -290,7 +290,7 @@ age_boxplot = df.boxplot('AGE','SEX', rot=30, figsize=(5,6), showfliers=False)
 ```
 
 
-![png]("/assets/images/output_6_0.png")
+![png]({{"/assets/images/output_6_0.png"}})
 
 
 
@@ -300,7 +300,7 @@ time_payer_boxplot = df.boxplot('HR_ARRIVAL','PAYER', rot=45, figsize=(9,6), sho
 ```
 
 
-![png]("/assets/images/output_7_0.png")
+![png]({{"/assets/images/output_7_0.png"}})
 
 
 
@@ -309,7 +309,7 @@ time_admsrc_boxplot = df.boxplot('HR_ARRIVAL','ADMSRC', rot=45, figsize=(9,6), s
 ```
 
 
-![png]("/assets/images/output_8_0.png")
+![png]({{"/assets/images/output_8_0.png"}})
 
 
 
@@ -326,7 +326,7 @@ eth_race.plot(kind='bar', width=1)
 
 
 
-![png]("/assets/images/output_9_1.png")
+![png]({{"/assets/images/output_9_1.png"}})
 
 
 
@@ -343,7 +343,7 @@ plt.show()
 ```
 
 
-![png]("/assets/images/output_10_0.png")
+![png]({{"/assets/images/output_10_0.png"}})
 
 
 
@@ -359,7 +359,7 @@ sns.pairplot(df_cat.sample(10000))
 
 
 
-![png]("/assets/images/output_11_1.png")
+![png]({{"/assets/images/output_11_1.png"}})
 
 
 
