@@ -1,5 +1,8 @@
 ---
-
+layout: post
+title: Diagnosing Your Data
+description: Healthcare Data Science Project 
+---
 # Diagnosing Your Data
 ## Healthcare Data Science Project  
 
