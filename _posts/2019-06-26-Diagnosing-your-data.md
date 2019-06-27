@@ -38,6 +38,10 @@ But, having this sort of data can raise (and hopefully begin to answer) several 
 
 I decided to use four quarters for this project--quarters 3 and 4 of 2017 and quarters 1 and 2 of 2018. In the code below, I selected the columns of interest from the entire dataset. Below, I am showing the first 5 rows of the data, to see how the data looks and that the information is in the appropriate format.
 
+For your reference, the complete notebook can be found 
+[here]("/assets/)
+
+
 
 ```python
 import pandas as pd
