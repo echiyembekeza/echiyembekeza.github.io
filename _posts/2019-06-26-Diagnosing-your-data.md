@@ -452,58 +452,22 @@ from numpy import argmax
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 
-```
-
-
-```python
 def split_target(data, target_name):
        target = data[[target_name]]
        data.drop(target_name, axis=1, inplace=True)
        return (data, target)
 X, y = split_target(df_cat, 'REASON_CDE_01')
-```
 
-
-```python
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
 ```
-
-
-```python
-#Just to check...
-print(y_train.groupby('REASON_CDE_01').size())
-```
-
-    REASON_CDE_01
-    0    5989152
-    1      10848
-    dtype: int64
-
-
+There were a few steps left out here...
 
 ```python
 X_train = pd.get_dummies(X_train)
 X_test = pd.get_dummies(X_test)
 ```
 
-
-```python
-X_train.loc[:] = X_train.loc[:].apply(pd.to_numeric)
-X_test.loc[:] = X_test.loc[:].apply(pd.to_numeric)
-```
-
-
-```python
-X_train_cols = X_train.columns
-X_test_cols = X_test.columns
-```
-
-
-```python
-X_train = X_train.values
-X_test = X_test.values
-```
 
 ### Logistic Regression model for the data  
   
