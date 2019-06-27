@@ -612,6 +612,3 @@ for num, nn_clf in enumerate(nn_clfs):
 ```
 
 
-```python
-
-```
